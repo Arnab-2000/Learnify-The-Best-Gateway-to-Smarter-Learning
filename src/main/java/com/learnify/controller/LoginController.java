@@ -30,7 +30,7 @@ public class LoginController {
             errorMsg = "You have Successfully logged out !!";
         }
 
-        model.addAttribute("errorMsg", errorMsg);
+        model.addAttribute("errorMessage", errorMsg);
         return "login.html";
     }
 

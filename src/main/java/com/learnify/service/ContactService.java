@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -33,6 +34,19 @@ public class ContactService {
             isSaved = true;
         }
         return isSaved;
+    }
+
+    public List<Contact> findMsgWithOpenStatus() {
+        return this.contactRepository.findMsgWithStatus(AppConstants.OPEN);
+    }
+
+    public boolean updateMessageStatus(int contactId, String updatedBy){
+        boolean isUpdated = false;
+        int result = contactRepository.updateMessageStatus(contactId, AppConstants.CLOSE, updatedBy);
+        if(result>0){
+            isUpdated = true;
+        }
+        return isUpdated;
     }
 
 //    public int getCounter() {

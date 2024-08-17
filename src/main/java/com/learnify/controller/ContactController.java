@@ -6,10 +6,14 @@ import com.learnify.service.ContactService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -40,5 +44,18 @@ public class ContactController {
 //        contactService.setCounter(contactService.getCounter()+1);
 //        log.info("No.of times contact form is submitted : "+contactService.getCounter());
         return "redirect:/contact";
+    }
+    @RequestMapping("/displayMessages")
+    public ModelAndView displayMessages(Model model){
+        List<Contact> contactMsgsWithOpenStatus = contactService.findMsgWithOpenStatus();
+        ModelAndView modelAndView = new ModelAndView("messages.html");
+        modelAndView.addObject("contactMsgsWithOpenStatus", contactMsgsWithOpenStatus);
+        return modelAndView;
+    }
+
+    @RequestMapping("/closeMsg")
+    public String closeMessage(@RequestParam int id, Authentication authentication){
+        contactService.updateMessageStatus(id, authentication.getName());
+        return "redirect:/displayMessages";
     }
 }
