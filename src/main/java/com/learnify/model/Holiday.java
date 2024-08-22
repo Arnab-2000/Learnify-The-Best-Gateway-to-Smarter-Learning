@@ -1,13 +1,19 @@
 package com.learnify.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class Holiday {
+@Entity
+@Table(name = "holidays")
+public class Holiday extends BaseEntity{
 
-    private final String day;
-    private final String reason;
-    private final Type type;
+    @Id
+    private String day;
+    private String reason;
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     public enum Type{
         FEDERAL, FESTIVAL
