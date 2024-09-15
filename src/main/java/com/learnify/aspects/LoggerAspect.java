@@ -31,5 +31,6 @@ public class LoggerAspect {
     @AfterThrowing(value = "execution(* com.learnify..*.*(..))", throwing = "ex")
     public void logException(JoinPoint joinPoint, Exception ex){
         log.error("An Exception Occurred due to: "+ex.getMessage());
+        System.out.println("Error is: ");
     }
 }

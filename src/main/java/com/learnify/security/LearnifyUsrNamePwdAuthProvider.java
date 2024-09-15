@@ -33,7 +33,7 @@ public class LearnifyUsrNamePwdAuthProvider implements AuthenticationProvider {
         Person person = this.personRepository.queryByEmail(email);
 
         if(null != person && person.getPersonId() > 0 && passwordEncoder.matches(password, person.getPwd())){
-            return new UsernamePasswordAuthenticationToken(person.getName(), null,
+            return new UsernamePasswordAuthenticationToken(email, null,
                     getGrantedAuthorities(person.getRoles()));
         }
         throw new BadCredentialsException("Invalid Credentials !!");

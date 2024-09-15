@@ -1,23 +1,25 @@
 package com.learnify.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
-@Entity
 @Data
-public class Address extends BaseEntity{
+public class Profile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
-    private int addressId;
+    @NotBlank(message = "Name must not be Blank!")
+    @Size(min = 3, message = "Name must be at least 3 characters long")
+    private String name;
+
+    @NotBlank(message = "Mobile Number must not be Blank!")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+    private String mobileNumber;
+
+    @NotBlank(message = "Email must not be blank")
+    @Email(message = "Please Provide a valid Email Address")
+    private String email;
 
     @NotBlank(message = "Address1 must not be blank")
     @Size(min = 5, message = "Address1 must be at least 5 characters long")
