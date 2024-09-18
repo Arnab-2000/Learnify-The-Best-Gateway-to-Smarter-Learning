@@ -6,6 +6,7 @@ import com.learnify.service.ContactService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -44,10 +45,18 @@ public class ContactController {
 //        log.info("No.of times contact form is submitted : "+contactService.getCounter());
         return "redirect:/contact";
     }
-    @RequestMapping("/displayMessages")
-    public ModelAndView displayMessages(Model model){
-        List<Contact> contactMsgsWithOpenStatus = contactService.findMsgWithOpenStatus();
+    @RequestMapping("/displayMessages/page/{pageNum}")
+    public ModelAndView displayMessages(Model model, @PathVariable int pageNum,
+                                        @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir){
+
+        Page<Contact> contactPage = this.contactService.findMsgWithOpenStatus(pageNum, sortField, sortDir);
+        List<Contact> contactMsgsWithOpenStatus = contactPage.getContent();
         ModelAndView modelAndView = new ModelAndView("messages.html");
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", contactPage.getTotalPages());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc")? "desc": "asc");
         modelAndView.addObject("contactMsgsWithOpenStatus", contactMsgsWithOpenStatus);
         return modelAndView;
     }
@@ -55,6 +64,6 @@ public class ContactController {
     @RequestMapping("/closeMsg")
     public String closeMessage(@RequestParam int id){
         contactService.updateMessageStatus(id);
-        return "redirect:/displayMessages";
+        return "redirect:/displayMessages/page/1?sortField=name&sortDir=asc";
     }
 }
