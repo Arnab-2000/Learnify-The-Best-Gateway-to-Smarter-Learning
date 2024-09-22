@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +16,18 @@ import java.util.List;
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
-    List<Contact> findByStatus(String status);
-
+//    List<Contact> findByStatus(String status);
+//
     Page<Contact> findByStatus(String status, Pageable pageable);
 
     @Transactional
     @Modifying
     @Query("UPDATE Contact c SET c.status = :status WHERE c.contactId = :contactId")
     int updateStatusById(String status, int contactId);
+
+//    Page<Contact> findOpenMsgs(@Param("status") String status, Pageable pageable);
+//
+//    @Transactional
+//    @Modifying
+//    int updateMsgStatus(String status, int contactId);
 }
